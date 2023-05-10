@@ -3,7 +3,7 @@ from flask import Flask, request, jsonify, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 import os 
-
+# install 
 from flask_restx import Api, Resource, fields
 # pip install scikit-learn
 
@@ -682,4 +682,4 @@ def get_model_index(model):
 
 if __name__ == '__main__':
     # app.run(debug=True, port=5000)
-    app.run(debug=True, host='172.31.84.158', port=5000)
+    app.run(debug=True, host='172.31.85.0', port=5000)
