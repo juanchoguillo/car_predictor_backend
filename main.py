@@ -681,4 +681,5 @@ def get_model_index(model):
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    # app.run(debug=True, port=5000)
+    app.run(debug=True, host='172.31.84.158', port=5000)
