@@ -724,5 +724,11 @@ def get_model_index(model):
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    #local port 
+    # app.run(debug=True, port=5000)
+
+    # ubuntu port 
     # app.run(debug=True, host='172.31.22.90', port=5000)
+
+    #AWS linux port 
+    app.run(debug=True, host='172.31.85.0', port=5000)
