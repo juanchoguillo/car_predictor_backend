@@ -91,48 +91,48 @@ class CarPredictionApi(Resource):
 
 
 
-# def predict_car_price(year, mileage, state, make, model):
-#     model_in_number = get_model_index(model)
-#     state_in_number = get_state_index(state)
-#     make_in_number = get_make_index(make)
-#     data = {'Year': [year], 'Mileage': [mileage], 'State2': [state_in_number], 'Make2': [make_in_number], 'Model2': [model_in_number]}
-#     input_df = pd.DataFrame(data)
-#     model_in = load('proyecto_rf_final.joblib')
-#     price = model_in.predict(input_df)
-#     return price
-
-
-
 def predict_car_price(year, mileage, state, make, model):
     model_in_number = get_model_index(model)
     state_in_number = get_state_index(state)
     make_in_number = get_make_index(make)
     data = {'Year': [year], 'Mileage': [mileage], 'State2': [state_in_number], 'Make2': [make_in_number], 'Model2': [model_in_number]}
     input_df = pd.DataFrame(data)
-    model_url = "https://github.com/juanchoguillo/car_predictor_backend/blob/main/main.py#:~:text=main.py-,proyecto_rf_final,-.joblib"
-    response = requests.get(model_url)
+    model_in = load('proyecto_rf_final.joblib')
+    price = model_in.predict(input_df)
+    return price
 
-    if response.status_code == 200:
-        # Save the model file locally
-        with open('model.joblib', 'wb') as file:
-            file.write(response.content)
 
-        # Load the model from the local file
-        try:
-            model_in = joblib.load('model.joblib')
-        except Exception as e:
-            return {"error": "Failed to load the model.", "details": str(e)}
 
-        # Use the model for predictions
-        price = model_in.predict(input_df)
+# def predict_car_price(year, mileage, state, make, model):
+#     model_in_number = get_model_index(model)
+#     state_in_number = get_state_index(state)
+#     make_in_number = get_make_index(make)
+#     data = {'Year': [year], 'Mileage': [mileage], 'State2': [state_in_number], 'Make2': [make_in_number], 'Model2': [model_in_number]}
+#     input_df = pd.DataFrame(data)
+#     model_url = "https://github.com/juanchoguillo/car_predictor_backend/blob/main/main.py#:~:text=main.py-,proyecto_rf_final,-.joblib"
+#     response = requests.get(model_url)
 
-        # Clean up the local model file if needed
-        # ...
+#     if response.status_code == 200:
+#         # Save the model file locally
+#         with open('model.joblib', 'wb') as file:
+#             file.write(response.content)
 
-        # Return the predicted price
-        return {"price": price.item()}
-    else:
-        return {"error": "Failed to download the model file."}
+#         # Load the model from the local file
+#         try:
+#             model_in = joblib.load('model.joblib')
+#         except Exception as e:
+#             return {"error": "Failed to load the model.", "details": str(e)}
+
+#         # Use the model for predictions
+#         price = model_in.predict(input_df)
+
+#         # Clean up the local model file if needed
+#         # ...
+
+#         # Return the predicted price
+#         return {"price": price.item()}
+#     else:
+#         return {"error": "Failed to download the model file."}
 
 
 
