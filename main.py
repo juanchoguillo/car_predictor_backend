@@ -114,7 +114,8 @@ def predict_car_price(year, mileage, state, make, model):
         f.write(response.content)
 
     # Load the model from the local file
-    model_in = joblib.load('model.joblib')
+    model_in = joblib.load('model.joblib', mmap_mode=None, allow_pickle=False, encoding='ASCII')
+
 
     # Use the model for predictions
     price = model_in.predict(input_df)
