@@ -117,8 +117,8 @@ def predict_car_price(year, mileage, state, make, model):
 
     # Load the model from the local file
     with open('model.joblib', 'rb') as file:
-        # model_in = joblib.load(file)
-         model_in = pickle.load(file)
+        model_in = joblib.load(file)
+        #  model_in = pickle.load(file)
 
     # Use the model for predictions
     price = model_in.predict(input_df)
