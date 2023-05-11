@@ -109,8 +109,20 @@ def predict_car_price(year, mileage, state, make, model):
     input_df = pd.DataFrame(data)
     model_url = "https://github.com/juanchoguillo/car_predictor_backend/blob/main/main.py#:~:text=main.py-,proyecto_rf_final,-.joblib"
     response = requests.get(model_url)
-    model_in = joblib.load(BytesIO(response.content))
+        # Save the model file locally
+    with open('model.joblib', 'wb') as f:
+        f.write(response.content)
+
+    # Load the model from the local file
+    model_in = joblib.load('model.joblib')
+
+    # Use the model for predictions
     price = model_in.predict(input_df)
+
+    # Clean up the local model file if needed
+    # ...
+
+    # Return the predicted price
     return price
 
 
