@@ -1,5 +1,6 @@
 # env set up with SQLAlchemy db
 from io import BytesIO
+import pickle
 from flask import Flask, request, jsonify, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
@@ -109,13 +110,15 @@ def predict_car_price(year, mileage, state, make, model):
     input_df = pd.DataFrame(data)
     model_url = "https://github.com/juanchoguillo/car_predictor_backend/blob/main/main.py#:~:text=main.py-,proyecto_rf_final,-.joblib"
     response = requests.get(model_url)
-        # Save the model file locally
-    with open('model.joblib', 'wb') as f:
-        f.write(response.content)
+
+    # Save the model file locally
+    with open('model.joblib', 'wb') as file:
+        file.write(response.content)
 
     # Load the model from the local file
-    model_in = joblib.load('model.joblib', mmap_mode=None, allow_pickle=False, encoding='ASCII')
-
+    with open('model.joblib', 'rb') as file:
+        # model_in = joblib.load(file)
+         model_in = pickle.load(file)
 
     # Use the model for predictions
     price = model_in.predict(input_df)
