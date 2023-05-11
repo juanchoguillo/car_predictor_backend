@@ -1,9 +1,10 @@
 # env set up with SQLAlchemy db
+from io import BytesIO
 from flask import Flask, request, jsonify, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 import os 
-# install 
+# install marshmallow_sqlalchemy
 from flask_restx import Api, Resource, fields
 # pip install scikit-learn
 
@@ -86,15 +87,32 @@ class CarPredictionApi(Resource):
 
 
 
+# def predict_car_price(year, mileage, state, make, model):
+#     model_in_number = get_model_index(model)
+#     state_in_number = get_state_index(state)
+#     make_in_number = get_make_index(make)
+#     data = {'Year': [year], 'Mileage': [mileage], 'State2': [state_in_number], 'Make2': [make_in_number], 'Model2': [model_in_number]}
+#     input_df = pd.DataFrame(data)
+#     model_in = load('proyecto_rf_final.joblib')
+#     price = model_in.predict(input_df)
+#     return price
+
+import requests
+import joblib
+import pandas as pd
+
 def predict_car_price(year, mileage, state, make, model):
     model_in_number = get_model_index(model)
     state_in_number = get_state_index(state)
     make_in_number = get_make_index(make)
     data = {'Year': [year], 'Mileage': [mileage], 'State2': [state_in_number], 'Make2': [make_in_number], 'Model2': [model_in_number]}
     input_df = pd.DataFrame(data)
-    model_in = load('proyecto_rf_final.joblib')
+    model_url = "https://github.com/juanchoguillo/car_predictor_backend/blob/main/main.py#:~:text=main.py-,proyecto_rf_final,-.joblib"
+    response = requests.get(model_url)
+    model_in = joblib.load(BytesIO(response.content))
     price = model_in.predict(input_df)
     return price
+
 
 def get_state_index(state):
     state_dict = {'Alaska': 0, 'Alabama': 1, 'Arkansas': 2, 'Arizona': 3, 'California': 4, 'Colorado': 5, 'Connecticut': 6, 'District of Columbia': 7, 'Delaware': 8, 'Florida': 9, 'Georgia': 10, 'Hawaii': 11, 'Iowa': 12, 'Idaho': 13, 'Illinois': 14, 'Indiana': 15, 'Kansas': 16, 'Kentucky': 17, 'Louisiana': 18, 'Massachusetts': 19, 'Maryland': 20, 'Maine': 21, 'Michigan': 22, 'Minnesota': 23, 'Missouri': 24, 'Mississippi': 25, 'Montana': 26, 'North Carolina': 27, 'North Dakota': 28, 'Nebraska': 29, 'New Hampshire': 30, 'New Jersey': 31, 'New Mexico': 32, 'Nevada': 33, 'New York': 34, 'Ohio': 35, 'Oklahoma': 36, 'Oregon': 37, 'Pennsylvania': 38, 'Rhode Island': 39, 'South Carolina': 40, 'South Dakota': 41, 'Tennessee': 42, 'Texas': 43, 'Utah': 44, 'Virginia': 45, 'Vermont': 46, 'Washington': 47, 'Wisconsin': 48, 'West Virginia': 49, 'Wyoming': 50}
