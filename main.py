@@ -97,10 +97,7 @@ def predict_car_price(year, mileage, state, make, model):
     make_in_number = get_make_index(make)
     data = {'Year': [year], 'Mileage': [mileage], 'State2': [state_in_number], 'Make2': [make_in_number], 'Model2': [model_in_number]}
     input_df = pd.DataFrame(data)
-    # model_in = load('proyecto_rf_final.joblib')
-    # AWS linux
-    model_in = load('model.joblib')
-
+    model_in = load('proyecto_rf_final.joblib')
     price = model_in.predict(input_df)
     return price
 
