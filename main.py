@@ -7,11 +7,14 @@ from flask_marshmallow import Marshmallow
 import os 
 # install marshmallow_sqlalchemy
 from flask_restx import Api, Resource, fields
+import joblib
 # pip install scikit-learn
 
 #for model 
 import pandas as pd
 from joblib import load
+import requests
+
 
 app = Flask(__name__)
 
@@ -98,9 +101,7 @@ class CarPredictionApi(Resource):
 #     price = model_in.predict(input_df)
 #     return price
 
-import requests
-import joblib
-import pandas as pd
+
 
 def predict_car_price(year, mileage, state, make, model):
     model_in_number = get_model_index(model)
@@ -111,23 +112,28 @@ def predict_car_price(year, mileage, state, make, model):
     model_url = "https://github.com/juanchoguillo/car_predictor_backend/blob/main/main.py#:~:text=main.py-,proyecto_rf_final,-.joblib"
     response = requests.get(model_url)
 
-    # Save the model file locally
-    with open('model.joblib', 'wb') as file:
-        file.write(response.content)
+    if response.status_code == 200:
+        # Save the model file locally
+        with open('model.joblib', 'wb') as file:
+            file.write(response.content)
 
-    # Load the model from the local file
-    with open('model.joblib', 'rb') as file:
-        model_in = joblib.load(file)
-        #  model_in = pickle.load(file)
+        # Load the model from the local file
+        try:
+            model_in = joblib.load('model.joblib')
+        except Exception as e:
+            return {"error": "Failed to load the model.", "details": str(e)}
 
-    # Use the model for predictions
-    price = model_in.predict(input_df)
+        # Use the model for predictions
+        price = model_in.predict(input_df)
 
-    # Clean up the local model file if needed
-    # ...
+        # Clean up the local model file if needed
+        # ...
 
-    # Return the predicted price
-    return price
+        # Return the predicted price
+        return {"price": price.item()}
+    else:
+        return {"error": "Failed to download the model file."}
+
 
 
 def get_state_index(state):
