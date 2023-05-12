@@ -37,6 +37,14 @@ api = Api(
 ns = api.namespace('predict', 
      description='Car Predictor')
 
+# Enable CORS for all routes
+@app.after_request
+def add_cors_headers(response):
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    response.headers['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS, PUT, DELETE, HEAD'
+    response.headers['Access-Control-Allow-Headers'] = 'Origin, Content-Type, Accept, Authorization'
+    return response
+
 # Definición argumentos o parámetros de la API
 parser = api.parser()
 parser.add_argument(
