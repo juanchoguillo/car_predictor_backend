@@ -7,6 +7,7 @@ from flask_marshmallow import Marshmallow
 import os 
 # install marshmallow_sqlalchemy
 from flask_restx import Api, Resource, fields
+from flask_cors import CORS
 import joblib
 # pip install scikit-learn
 
@@ -16,7 +17,10 @@ from joblib import load
 import requests
 
 
+
 app = Flask(__name__)
+
+CORS(app=app)
 
 basedir=os.path.abspath(os.path.dirname(__file__))
 # print(basedir)
@@ -37,13 +41,14 @@ api = Api(
 ns = api.namespace('predict', 
      description='Car Predictor')
 
-# Enable CORS for all routes
-@app.after_request
-def add_cors_headers(response):
-    response.headers['Access-Control-Allow-Origin'] = '*'
-    response.headers['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS, PUT, DELETE, HEAD'
-    response.headers['Access-Control-Allow-Headers'] = 'Origin, Content-Type, Accept, Authorization'
-    return response
+# # Enable CORS for all routes
+# @app.after_request
+# def add_cors_headers(response):
+#     response.headers['Access-Control-Allow-Origin'] = '*'
+#     response.headers['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS, PUT, DELETE, HEAD'
+#     response.headers['Access-Control-Allow-Headers'] = 'Origin, Content-Type, Accept, Authorization'
+#     return response
+
 
 # Definición argumentos o parámetros de la API
 parser = api.parser()
